@@ -140,7 +140,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Open Prompt Injection Experiments')
-    parser.add_argument('--model_name', default='qwen-attn', type=str)
+    parser.add_argument('--model_name', default='qwen2-attn', type=str)
     parser.add_argument('--num_data', default=10, type=int)
     parser.add_argument('--select_index', default="0", type=str)
     parser.add_argument('--dataset', type=str)
