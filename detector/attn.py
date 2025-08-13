@@ -1,4 +1,6 @@
 import numpy as np
+from tqdm import tqdm
+
 from .utils import process_attn, calc_attn_score
 
 
@@ -13,23 +15,26 @@ class AttentionDetector():
         self.threshold = threshold
         if pos_examples and neg_examples:
             pos_scores, neg_scores = [], []
-            for prompt in pos_examples:
-                _, _, attention_maps, _, input_range, generated_probs = self.model.query(
-                    prompt, return_type="attention")
+            for prompt in tqdm(pos_examples, desc="pos_examples"):
+                _, _, attention_maps, _, input_range, generated_probs = self.model.inference(
+                    self.instruction, prompt, max_output_tokens=1
+                )
                 pos_scores.append(self.attn2score(attention_maps, input_range))
 
-            for prompt in neg_examples:
-                _, _, attention_maps, _, input_range, generated_probs = self.model.query(
-                    prompt, return_type="attention")
+            for prompt in tqdm(neg_examples, desc="neg_examples"):
+                _, _, attention_maps, _, input_range, generated_probs = self.model.inference(
+                    self.instruction, prompt, max_output_tokens=1
+                )
                 neg_scores.append(self.attn2score(attention_maps, input_range))
 
-            self.threshold = np.mean(neg_scores)
+            self.threshold = (np.mean(pos_scores) + np.mean(neg_scores)) / 2
 
         if pos_examples and not neg_examples:
             pos_scores = []
-            for prompt in pos_examples:
-                _, _, attention_maps, _, input_range, generated_probs = self.model.query(
-                    prompt, return_type="attention")
+            for prompt in tqdm(pos_examples, desc="pos_examples"):
+                _, _, attention_maps, _, input_range, generated_probs = self.model.inference(
+                    self.instruction, prompt, max_output_tokens=1
+                )
                 pos_scores.append(self.attn2score(attention_maps, input_range))
 
             self.threshold = np.mean(pos_scores) - 4 * np.std(pos_scores)
