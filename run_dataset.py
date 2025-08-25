@@ -31,7 +31,7 @@ def main(args):
     model = create_model(config=model_config)
     model.print_model_info()
 
-    dataset = load_dataset("deepset/prompt-injections")
+    dataset = load_dataset(args.dataset_name)
     test_data = dataset['test']
     
     detector = AttentionDetector(model)
@@ -90,7 +90,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Prompt Injection Detection Script")
     
-    parser.add_argument("--model_name", type=str, default="qwen-attn", 
+    parser.add_argument("--model_name", type=str, default="qwen2-attn",
                         help="Path to the model configuration file.")
     parser.add_argument("--dataset_name", type=str, default="deepset/prompt-injections", 
                         help="Path to the dataset.")
