@@ -41,6 +41,9 @@ Paper: https://arxiv.org/abs/2411.00348
     python run.py --model_name {model} --test_query "{query you want to test}"
     ```
 
+### License
+[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.en)
+
 ### Citation
 ```
 @misc{hung2024attentiontrackerdetectingprompt,
